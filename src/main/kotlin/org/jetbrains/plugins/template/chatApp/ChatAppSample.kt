@@ -1,4 +1,4 @@
-package org.jetbrains.plugins.template.ui
+package org.jetbrains.plugins.template.chatApp
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

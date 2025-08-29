@@ -9,7 +9,7 @@ import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import org.jetbrains.jewel.bridge.addComposeTab
 import org.jetbrains.plugins.template.CoroutineScopeHolder
-import org.jetbrains.plugins.template.ui.ChatAppSample
+import org.jetbrains.plugins.template.chatApp.ChatAppSample
 import org.jetbrains.plugins.template.weatherApp.model.Location
 import org.jetbrains.plugins.template.weatherApp.services.LocationsProvider
 import org.jetbrains.plugins.template.weatherApp.services.WeatherForecastService
