@@ -57,6 +57,7 @@ dependencies {
             "intellij.platform.jewel.foundation",
             "intellij.platform.jewel.ui",
             "intellij.platform.jewel.ideLafBridge",
+            "intellij.platform.compose"
         )
 
         // Plugin Dependencies. Uses `platformBundledPlugins` property from the gradle.properties file for bundled IntelliJ Platform plugins.
