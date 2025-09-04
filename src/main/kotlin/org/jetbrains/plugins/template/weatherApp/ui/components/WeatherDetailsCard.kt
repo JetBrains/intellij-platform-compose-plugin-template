@@ -328,7 +328,7 @@ private fun WeatherIconDisplay(
             ).value
 
             Icon(
-                key = WeatherIcons.dayClear,
+                key = WeatherIcons.SUNNY,
                 contentDescription = null,
                 modifier = modifier.rotate(rotation),
                 hint = EmbeddedToInlineCssSvgTransformerHint
@@ -621,8 +621,8 @@ private fun getDayName(date: LocalDateTime, currentDate: LocalDateTime): String 
 }
 
 /**
- * Determines if it's night time based on the current hour.
- * Night time is considered to be between 7 PM (19:00) and 6 AM (6:00).
+ * Determines if it's nighttime based on the current hour.
+ * Nighttime is considered to be between 7 PM (19:00) and 6 AM (6:00).
  */
 fun isNightTime(dateTime: LocalDateTime): Boolean {
     val hour = dateTime.hour
@@ -630,7 +630,7 @@ fun isNightTime(dateTime: LocalDateTime): Boolean {
 }
 
 /**
- * Returns a color based on the temperature and whether it's night time.
+ * Returns a color based on the temperature and whether it's nighttime.
  * - Cold temperatures: blue/purple
  * - Warm temperatures: red/pink
  * - Night time: darker shades

@@ -24,7 +24,7 @@ data class WeatherForecastData(
     val currentWeatherForecast: DailyForecast,
     val dailyForecasts: List<DailyForecast> = emptyList()
 ) {
-    companion object Companion {
+    companion object {
         val EMPTY: WeatherForecastData = WeatherForecastData(
             Location("", ""),
             DailyForecast(
@@ -44,25 +44,21 @@ data class WeatherForecastData(
  * Enum representing different weather types.
  */
 enum class WeatherType(val label: String, val dayIconKey: IconKey, val nightIconKey: IconKey) {
-    CLEAR("Sunny", WeatherIcons.dayClear, WeatherIcons.nightHalfMoonClear),
-    CLOUDY("Cloudy", dayIconKey = WeatherIcons.cloudy, nightIconKey = WeatherIcons.cloudy),
+    CLEAR("Sunny", WeatherIcons.SUNNY, WeatherIcons.SUNNY),
+    CLOUDY("Cloudy", dayIconKey = WeatherIcons.CLOUDY, nightIconKey = WeatherIcons.CLOUDY),
     PARTLY_CLOUDY(
         "Partly Cloudy",
-        dayIconKey = WeatherIcons.dayPartialCloud,
-        nightIconKey = WeatherIcons.nightHalfMoonPartialCloud
+        dayIconKey = WeatherIcons.PARTLY_CLOUDY,
+        nightIconKey = WeatherIcons.PARTLY_CLOUDY,
     ),
-    RAINY("Rainy", dayIconKey = WeatherIcons.dayRain, nightIconKey = WeatherIcons.nightHalfMoonRain),
+    RAINY("Rainy", dayIconKey = WeatherIcons.RAINY, nightIconKey = WeatherIcons.RAINY),
     RAINY_AND_THUNDER(
         "Rainy and Thunder",
-        dayIconKey = WeatherIcons.dayRainThunder,
-        nightIconKey = WeatherIcons.nightHalfMoonRainThunder
+        dayIconKey = WeatherIcons.STORM,
+        nightIconKey = WeatherIcons.STORM
     ),
-    THUNDER("Thunder", dayIconKey = WeatherIcons.thunder, nightIconKey = WeatherIcons.thunder),
-
-    SNOWY("Snowy", dayIconKey = WeatherIcons.daySnow, nightIconKey = WeatherIcons.nightHalfMoonSnow),
-    TORNADO("Stormy", dayIconKey = WeatherIcons.tornado, nightIconKey = WeatherIcons.tornado),
-    FOG("Fog", dayIconKey = WeatherIcons.fog, nightIconKey = WeatherIcons.fog),
-    MIST("Mist", dayIconKey = WeatherIcons.mist, nightIconKey = WeatherIcons.mist);
+    THUNDER("Thunder", dayIconKey = WeatherIcons.STORM, nightIconKey = WeatherIcons.STORM),
+    SNOWY("Snowy", dayIconKey = WeatherIcons.SNOWY, nightIconKey = WeatherIcons.SNOWY);
 
     companion object {
         fun random(): WeatherType = entries.toTypedArray().random()

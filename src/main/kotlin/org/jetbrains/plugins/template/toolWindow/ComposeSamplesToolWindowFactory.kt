@@ -13,11 +13,18 @@ import org.jetbrains.plugins.template.CoroutineScopeHolder
 import org.jetbrains.plugins.template.ui.ChatAppSample
 import org.jetbrains.plugins.template.weatherApp.model.Location
 import org.jetbrains.plugins.template.weatherApp.services.LocationsProvider
-import org.jetbrains.plugins.template.weatherApp.ui.WeatherAppViewModel
 import org.jetbrains.plugins.template.weatherApp.services.WeatherForecastService
 import org.jetbrains.plugins.template.weatherApp.ui.WeatherAppSample
+import org.jetbrains.plugins.template.weatherApp.ui.WeatherAppViewModel
 
 class ComposeSamplesToolWindowFactory : ToolWindowFactory, DumbAware {
+
+    override fun init(toolWindow: ToolWindow) {
+        super.init(toolWindow)
+
+        toolWindow.title = "Compose Samples"
+        toolWindow.stripeTitle = "Compose Samples"
+    }
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         val coroutineScopeHolder = project.service<CoroutineScopeHolder>()
