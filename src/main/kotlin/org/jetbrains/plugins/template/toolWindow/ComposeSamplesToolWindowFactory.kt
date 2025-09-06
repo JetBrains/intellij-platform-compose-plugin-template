@@ -22,8 +22,9 @@ class ComposeSamplesToolWindowFactory : ToolWindowFactory, DumbAware {
     override fun init(toolWindow: ToolWindow) {
         super.init(toolWindow)
 
-        toolWindow.title = "Compose Samples"
-        toolWindow.stripeTitle = "Compose Samples"
+        val text = "Compose Samples"
+        toolWindow.title = text
+        toolWindow.stripeTitle = text
     }
 
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
