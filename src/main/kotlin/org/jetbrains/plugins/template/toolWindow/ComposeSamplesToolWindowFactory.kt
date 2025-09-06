@@ -37,7 +37,7 @@ class ComposeSamplesToolWindowFactory : ToolWindowFactory, DumbAware {
         val viewModel = WeatherAppViewModel(
             listOf(Location("Munich", "Germany")),
             project.service<CoroutineScopeHolder>()
-                .createScope(WeatherAppViewModel::class.java.simpleName),
+                .createScope(::WeatherAppViewModel.name),
             WeatherForecastService()
         )
         Disposer.register(toolWindow.disposable, viewModel)
