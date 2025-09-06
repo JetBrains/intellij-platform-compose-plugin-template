@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.PropertyKey
 import java.util.function.Supplier
 
-private const val BUNDLE = "messages.ComposeTemplate"
+private const val BUNDLE = "messages.ComposeTemplateBundle"
 
 object ComposeTemplateBundle {
     private val instance = DynamicBundle(ComposeTemplateBundle::class.java, BUNDLE)
