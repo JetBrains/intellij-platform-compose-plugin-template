@@ -19,14 +19,6 @@ import org.jetbrains.plugins.template.weatherApp.ui.WeatherAppViewModel
 class ComposeSamplesToolWindowFactory : ToolWindowFactory, DumbAware {
     override fun shouldBeAvailable(project: Project) = true
 
-    override fun init(toolWindow: ToolWindow) {
-        super.init(toolWindow)
-
-        val text = "Compose Samples"
-        toolWindow.title = text
-        toolWindow.stripeTitle = text
-    }
-
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
         weatherApp(project, toolWindow)
         chatApp(project, toolWindow)
