@@ -51,14 +51,7 @@ dependencies {
         create(providers.gradleProperty("platformType"), providers.gradleProperty("platformVersion"))
 
         // Compose support dependencies
-        bundledModules(
-            "intellij.libraries.skiko",
-            "intellij.libraries.compose.foundation.desktop",
-            "intellij.platform.jewel.foundation",
-            "intellij.platform.jewel.ui",
-            "intellij.platform.jewel.ideLafBridge",
-            "intellij.platform.compose"
-        )
+        composeUI()
 
         // Plugin Dependencies. Uses `platformBundledPlugins` property from the gradle.properties file for bundled IntelliJ Platform plugins.
         bundledPlugins(providers.gradleProperty("platformBundledPlugins").map { it.split(',') })

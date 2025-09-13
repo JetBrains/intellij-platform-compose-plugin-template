@@ -36,7 +36,7 @@ class ComposeSamplesToolWindowFactory : ToolWindowFactory, DumbAware {
         )
         Disposer.register(toolWindow.disposable, viewModel)
 
-        toolWindow.addComposeTab("Weather App") {
+        toolWindow.addComposeTab("Weather App", focusOnClickInside = true) {
             LaunchedEffect(Unit) {
                 viewModel.onReloadWeatherForecast()
             }
@@ -57,6 +57,8 @@ class ComposeSamplesToolWindowFactory : ToolWindowFactory, DumbAware {
         )
         Disposer.register(toolWindow.disposable, viewModel)
 
-        toolWindow.addComposeTab("Chat App") { ChatAppSample(viewModel) }
+        toolWindow.addComposeTab("Chat App", focusOnClickInside = true) {
+            ChatAppSample(viewModel)
+        }
     }
 }
