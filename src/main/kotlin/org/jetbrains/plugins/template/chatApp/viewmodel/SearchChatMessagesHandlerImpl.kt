@@ -72,8 +72,11 @@ class SearchChatMessagesHandlerImpl(
     }
 
     private fun moveSearchResultSelectionToIndex(searchState: SearchState.SearchResults, newSearchResultIndex: Int) {
-        val nextSearchResultIndex = newSearchResultIndex
-            .coerceIn(minimumValue = 0, maximumValue = searchState.searchResultIds.lastIndex)
+        val nextSearchResultIndex = when {
+            newSearchResultIndex < 0 -> searchState.searchResultIds.lastIndex
+            newSearchResultIndex > searchState.searchResultIds.lastIndex -> 0
+            else -> newSearchResultIndex
+        }
 
         _searchStateFlow.value = searchState.copy(currentSelectedSearchResultIndex = nextSearchResultIndex)
     }
