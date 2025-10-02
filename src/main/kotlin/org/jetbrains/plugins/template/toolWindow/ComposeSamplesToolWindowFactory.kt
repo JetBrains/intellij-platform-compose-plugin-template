@@ -10,6 +10,8 @@ import com.intellij.openapi.wm.ToolWindowFactory
 import org.jetbrains.jewel.bridge.addComposeTab
 import org.jetbrains.plugins.template.CoroutineScopeHolder
 import org.jetbrains.plugins.template.chatApp.ChatAppSample
+import org.jetbrains.plugins.template.chatApp.repository.ChatRepository
+import org.jetbrains.plugins.template.chatApp.viewmodel.ChatViewModel
 import org.jetbrains.plugins.template.weatherApp.model.Location
 import org.jetbrains.plugins.template.weatherApp.services.LocationsProvider
 import org.jetbrains.plugins.template.weatherApp.services.WeatherForecastService
@@ -48,8 +50,13 @@ class ComposeSamplesToolWindowFactory : ToolWindowFactory, DumbAware {
     }
 
     private fun chatApp(project: Project, toolWindow: ToolWindow) {
-        toolWindow.addComposeTab("Chat App") {
-            ChatAppSample()
-        }
+        val viewModel = ChatViewModel(
+            project.service<CoroutineScopeHolder>()
+                .createScope(ChatViewModel::class.java.simpleName),
+            service<ChatRepository>()
+        )
+        Disposer.register(toolWindow.disposable, viewModel)
+
+        toolWindow.addComposeTab("Chat App") { ChatAppSample(viewModel) }
     }
 }
