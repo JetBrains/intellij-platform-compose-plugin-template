@@ -10,6 +10,8 @@ import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -231,11 +233,20 @@ private fun ChatSearchBar(
 
     val searchFieldState = rememberTextFieldState(searchQuery)
 
+    val focusRequester = remember { FocusRequester() }
+
     // Handle text changes
     LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+
         snapshotFlow { searchFieldState.text.toString() }
             .distinctUntilChanged()
             .collect { query -> onSearchQueryChange(query) }
+    }
+
+    // Handle focus request
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
     }
 
     Row(
@@ -252,7 +263,8 @@ private fun ChatSearchBar(
             placeholder = { Text("Search messages...") },
             modifier = Modifier
                 .weight(1f)
-                .onKeyEvent { keyEvent ->
+                .focusRequester(focusRequester = focusRequester)
+                .onPreviewKeyEvent { keyEvent ->
                     when {
                         keyEvent.key == Key.Escape && keyEvent.type == KeyEventType.KeyDown -> {
                             onCloseSearch()
