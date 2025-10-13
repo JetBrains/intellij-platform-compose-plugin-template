@@ -65,7 +65,7 @@ fun WeatherDetailsCard(
         }
 
         is WeatherForecastUIState.Loading -> WeatherAppColors.mildWeatherColor to Color.White
-        is WeatherForecastUIState.Error -> WeatherAppColors.hotWeatherColor to Color.White // Brown for errors
+        is WeatherForecastUIState.Error -> WeatherAppColors.hotWeatherColor to Color.White
         is WeatherForecastUIState.Empty -> WeatherAppColors.coolWeatherColor to Color.White
     }
 
