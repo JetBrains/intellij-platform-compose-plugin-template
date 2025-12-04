@@ -3,9 +3,7 @@
     <name>Compose Template Example</name>
     <vendor url="https://www.yourcompany.com">YourCompany</vendor>
 
-    <dependencies>
-        <module name="intellij.platform.compose"/>
-    </dependencies>
+    <depends>com.intellij.modules.compose</depends>
 
     <resource-bundle>messages.ComposeTemplateBundle</resource-bundle>
 
