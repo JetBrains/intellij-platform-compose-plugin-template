@@ -48,9 +48,10 @@ dependencies {
     testImplementation(libs.skikoAwtRuntimeAll)
 
     intellijPlatform {
-        create(providers.gradleProperty("platformType"), providers.gradleProperty("platformVersion"))
+        intellijIdea(providers.gradleProperty("platformVersion"))
 
         // Compose support dependencies
+        @Suppress("UnstableApiUsage")
         composeUI()
 
         // Plugin Dependencies. Uses `platformBundledPlugins` property from the gradle.properties file for bundled IntelliJ Platform plugins.
