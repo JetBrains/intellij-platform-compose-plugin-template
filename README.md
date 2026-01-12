@@ -19,9 +19,6 @@ The main goal of this template is to speed up the setup phase of plugin developm
 
 If you're still not quite sure what this is all about, read our introduction: [What is the IntelliJ Platform?][docs:intro]
 
-> [!NOTE]
-> Click the <kbd>Watch</kbd> button on the top to be notified about releases containing new features and fixes.
-
 ### Table of contents
 
 In this README, we will highlight the following elements of template-project creation:
@@ -35,8 +32,7 @@ In this README, we will highlight the following elements of template-project cre
   - services – project and application-level services
 - [Testing](#testing)
   - [Functional tests](#functional-tests)
-  - [Code coverage](#code-coverage)
-  - [UI tests](#ui-tests)
+
 - [Predefined Run/Debug configurations](#predefined-rundebug-configurations)
 - [Continuous integration](#continuous-integration) based on GitHub Actions
   - [Dependencies management](#dependencies-management) with Dependabot
