@@ -4,7 +4,7 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.components.Service.Level
 import com.intellij.platform.util.coroutines.childScope
 import kotlinx.coroutines.CoroutineScope
-
+import kotlinx.coroutines.Job
 
 /**
  * A service-level class that provides and manages coroutine scopes for a given project.
