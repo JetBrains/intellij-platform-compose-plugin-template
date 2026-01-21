@@ -77,6 +77,8 @@ fun ChatAppSample(viewModel: ChatViewModel) {
             searchState = searchState
         )
 
+        HorizontalDivider()
+
         PromptInput(
             modifier = Modifier.fillMaxWidth().heightIn(max = 136.dp),
             textFieldState = textFieldState,
@@ -86,6 +88,14 @@ fun ChatAppSample(viewModel: ChatViewModel) {
             onStop = { viewModel.onAbortSendingMessage() }
         )
     }
+}
+
+@Composable
+private fun HorizontalDivider() {
+    Divider(
+        modifier = Modifier.fillMaxWidth(),
+        orientation = Orientation.Horizontal
+    )
 }
 
 @Composable
@@ -173,7 +183,7 @@ private fun ChatHeaderWithSearchBar(
         }
     }
 
-    Divider(Orientation.Horizontal, modifier = Modifier.fillMaxWidth().height(1.dp))
+    HorizontalDivider()
 
     // Search bar (shown when search is active)
     if (showSearchBar) {
@@ -184,9 +194,10 @@ private fun ChatHeaderWithSearchBar(
             onPreviousResult = { onPreviousResult() },
             onCloseSearch = { onStopSearch() }
         )
+
+        HorizontalDivider()
     }
 
-    Divider(Orientation.Horizontal, modifier = Modifier.fillMaxWidth().height(1.dp))
 }
 
 @Composable
