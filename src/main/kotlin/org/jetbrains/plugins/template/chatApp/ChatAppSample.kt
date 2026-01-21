@@ -78,9 +78,7 @@ fun ChatAppSample(viewModel: ChatViewModel) {
         )
 
         PromptInput(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(max = 120.dp),
+            modifier = Modifier.fillMaxWidth().heightIn(max = 136.dp),
             textFieldState = textFieldState,
             promptInputState = messageInputState,
             onInputChanged = { viewModel.onPromptInputChanged(it) },

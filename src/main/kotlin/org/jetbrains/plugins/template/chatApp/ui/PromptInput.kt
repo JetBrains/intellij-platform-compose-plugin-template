@@ -1,26 +1,19 @@
 package org.jetbrains.plugins.template.chatApp.ui
 
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.*
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.distinctUntilChanged
-import org.jetbrains.jewel.foundation.theme.JewelTheme
-import org.jetbrains.jewel.ui.component.*
-import org.jetbrains.jewel.ui.icons.AllIconsKeys
-import org.jetbrains.jewel.ui.theme.iconButtonStyle
-import org.jetbrains.plugins.template.chatApp.ChatAppColors
-import org.jetbrains.plugins.template.chatApp.ChatAppIcons
+import org.jetbrains.jewel.ui.component.DefaultButton
+import org.jetbrains.jewel.ui.component.OutlinedButton
+import org.jetbrains.jewel.ui.component.Text
+import org.jetbrains.jewel.ui.component.TextArea
 import org.jetbrains.plugins.template.chatApp.viewmodel.MessageInputState
 import org.jetbrains.plugins.template.chatApp.viewmodel.isSending
 
@@ -74,18 +67,13 @@ fun PromptInput(
             }
     }
 
-    Column(
-        modifier
-            .border(1.dp, ChatAppColors.Prompt.border, RoundedCornerShape(8.dp))
-            .clip(RoundedCornerShape(8.dp))
-            .padding(8.dp),
-    ) {
+    Column(modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
         TextArea(
             state = textFieldState,
             modifier = Modifier
-                .weight(0.75f)
+                .weight(1f)
                 .fillMaxWidth()
-                .padding(bottom = 4.dp)
+                .padding(top = 6.dp, bottom = 8.dp)
                 .onPreviewKeyEvent { keyEvent ->
                     if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyDown) {
                         if (keyEvent.isShiftPressed) {
@@ -116,9 +104,9 @@ fun PromptInput(
 
         Row(
             modifier = Modifier
-                .weight(0.25f)
+                .wrapContentHeight()
                 .fillMaxWidth()
-                .padding(top = 4.dp),
+                .padding(vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ) {
@@ -136,50 +124,14 @@ fun PromptInput(
                             skipInputChangeUpdate = true
                             textFieldState.setTextAndPlaceCursorAtEnd("")
                         },
-                        content = {
-                            Row(
-                                Modifier.padding(4.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceEvenly
-                            ) {
-
-                                Text("Send")
-
-                                Icon(
-                                    modifier = Modifier.size(JewelTheme.iconButtonStyle.metrics.minSize.height),
-                                    key = ChatAppIcons.Prompt.send,
-                                    contentDescription = "Send",
-                                    tint = if (promptInputState != MessageInputState.Disabled) ChatAppColors.Icon.enabledIconTint else ChatAppColors.Icon.disabledIconTint
-                                )
-                            }
-                        }
-                    )
+                        content = { Text("Send") })
                 }
 
                 is MessageInputState.Sending -> {
                     OutlinedButton(
                         modifier = Modifier.wrapContentSize(),
-                        onClick = {
-                            onStop(textFieldState.text.toString())
-                        },
-                        content = {
-                            Row(
-                                Modifier.padding(4.dp),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceEvenly
-                            ) {
-
-                                Text("Stop")
-
-                                Icon(
-                                    modifier = Modifier.size(JewelTheme.iconButtonStyle.metrics.minSize.height),
-                                    key = ChatAppIcons.Prompt.stop,
-                                    contentDescription = "Stop sending",
-                                    tint = ChatAppColors.Icon.stopIconTint
-                                )
-                            }
-                        }
-                    )
+                        onClick = { onStop(textFieldState.text.toString()) },
+                        content = { Text("Stop") })
                 }
             }
         }
