@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.*
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -198,32 +197,6 @@ private fun ChatHeaderWithSearchBar(
         HorizontalDivider()
     }
 
-}
-
-@Composable
-private fun ChatHeaderTitle(
-    modifier: Modifier = Modifier,
-    title: String = "AI Assistant Chat",
-    subtitle: String = "Chat with your AI Assistant! Ask questions, get help, or just have a conversation."
-) {
-    Column(modifier = modifier) {
-        Text(
-            text = title,
-            style = JewelTheme.defaultTextStyle.copy(
-                fontWeight = FontWeight.Bold,
-                fontSize = 20.sp
-            )
-        )
-
-        Text(
-            text = subtitle,
-            style = JewelTheme.defaultTextStyle.copy(
-                color = ChatAppColors.Text.disabled,
-                fontSize = 14.sp
-            ),
-            modifier = Modifier.padding(top = 4.dp)
-        )
-    }
 }
 
 @Composable
