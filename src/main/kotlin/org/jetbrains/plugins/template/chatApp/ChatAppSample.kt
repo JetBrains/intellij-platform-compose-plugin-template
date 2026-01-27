@@ -167,14 +167,16 @@ private fun ChatHeaderWithSearchBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(ChatAppColors.Panel.background)
-            .padding(16.dp),
+            .padding(PaddingValues(start = 24.dp, end = 24.dp, top= 16.dp, bottom = 12.dp)),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.Top
     ) {
         ChatHeaderTitle(modifier = Modifier.weight(1f))
 
-        IconButton(onClick = { if (showSearchBar) onStopSearch() else onStartSearch() }) {
+        IconButton(
+            onClick = { if (showSearchBar) onStopSearch() else onStartSearch() },
+            modifier = Modifier.size(26.dp)
+        ) {
             Icon(
                 ChatAppIcons.Header.search,
                 contentDescription = if (showSearchBar) "Close search" else "Search messages"
