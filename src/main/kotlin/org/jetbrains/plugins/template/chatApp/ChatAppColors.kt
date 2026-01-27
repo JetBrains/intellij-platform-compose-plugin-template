@@ -2,7 +2,10 @@ package org.jetbrains.plugins.template.chatApp
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.intellij.ui.JBColor
+import org.jetbrains.jewel.bridge.toComposeColor
 import org.jetbrains.jewel.foundation.theme.JewelTheme
+import org.jetbrains.jewel.ui.theme.colorPalette
 import org.jetbrains.jewel.ui.theme.defaultBannerStyle
 
 object ChatAppColors {
@@ -13,7 +16,7 @@ object ChatAppColors {
 
     object Text {
         val disabled: Color
-            @Composable get() = JewelTheme.globalColors.text.disabled
+            @Composable get() = JewelTheme.colorPalette.grayOrNull(7) ?: JewelTheme.globalColors.text.disabled
 
         val normal: Color
             @Composable get() = JewelTheme.globalColors.text.normal
@@ -27,10 +30,11 @@ object ChatAppColors {
     object MessageBubble {
         // Backgrounds
         val myBackground: Color
-            @Composable get() = JewelTheme.defaultBannerStyle.information.colors.background.copy(alpha = 0.75f)
+            @Composable get() = JBColor.namedColor("HelpBrowser.UserMessage.background", 0xDFE1E5)
+                .toComposeColor()
 
         val othersBackground: Color
-            @Composable get() = JewelTheme.defaultBannerStyle.success.colors.background.copy(alpha = 0.75f)
+            @Composable get() = Color.Transparent
 
         // Borders
         val myBackgroundBorder: Color
@@ -55,15 +59,5 @@ object ChatAppColors {
         val matchingOthersBorder: Color
             @Composable get() = JewelTheme.defaultBannerStyle.success.colors.border.copy(alpha = 0.75f)
 
-    }
-
-    object Prompt {
-        val border: Color = Color.White
-    }
-
-    object Icon {
-        val enabledIconTint: Color = Color.White
-        val disabledIconTint: Color = Color.Gray
-        val stopIconTint: Color = Color.White
     }
 }

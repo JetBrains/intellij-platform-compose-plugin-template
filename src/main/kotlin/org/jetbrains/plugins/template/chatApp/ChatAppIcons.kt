@@ -7,13 +7,10 @@ import org.jetbrains.jewel.ui.icons.AllIconsKeys
  * Grouped by feature area to keep call-sites tidy and consistent.
  */
 object ChatAppIcons {
-    object Header {
-        val search = AllIconsKeys.Actions.Find
-        val close = AllIconsKeys.Actions.Cancel
-    }
-
-    object Prompt {
-        val send = AllIconsKeys.RunConfigurations.TestState.Run
-        val stop = AllIconsKeys.Run.Stop
-    }
+    val Search = AllIconsKeys.Actions.Find
+    val Close = AllIconsKeys.General.Close
+    val CloseSmallHovered = AllIconsKeys.General.CloseSmallHovered
+    val CloseSmall = AllIconsKeys.General.CloseSmall
+    val Up = AllIconsKeys.Chooser.Top
+    val Down = AllIconsKeys.Chooser.Bottom
 }

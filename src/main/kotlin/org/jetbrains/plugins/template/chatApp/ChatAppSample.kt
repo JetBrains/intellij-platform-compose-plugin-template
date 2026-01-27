@@ -7,12 +7,14 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.input.key.*
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -23,6 +25,7 @@ import org.jetbrains.plugins.template.chatApp.model.ChatMessage
 import org.jetbrains.plugins.template.chatApp.ui.*
 import org.jetbrains.plugins.template.chatApp.viewmodel.ChatViewModel
 import org.jetbrains.plugins.template.chatApp.viewmodel.MessageInputState
+import org.jetbrains.plugins.template.components.CloseIcon
 
 @Composable
 fun ChatAppSample(viewModel: ChatViewModel) {
@@ -63,8 +66,7 @@ fun ChatAppSample(viewModel: ChatViewModel) {
             onStopSearch = { viewModel.searchChatMessagesHandler().onStopSearch() },
             onSearchQueryChange = { query -> viewModel.searchChatMessagesHandler().onSearchQuery(query) },
             onNextResult = { viewModel.searchChatMessagesHandler().onNavigateToNextSearchResult() },
-            onPreviousResult = { viewModel.searchChatMessagesHandler().onNavigateToPreviousSearchResult() }
-        )
+            onPreviousResult = { viewModel.searchChatMessagesHandler().onNavigateToPreviousSearchResult() })
 
         // Message area
         ChatList(
@@ -175,10 +177,9 @@ private fun ChatHeaderWithSearchBar(
 
         IconButton(
             onClick = { if (showSearchBar) onStopSearch() else onStartSearch() },
-            modifier = Modifier.size(26.dp)
         ) {
             Icon(
-                ChatAppIcons.Header.search,
+                ChatAppIcons.Search,
                 contentDescription = if (showSearchBar) "Close search" else "Search messages"
             )
         }
@@ -205,6 +206,7 @@ private fun ChatHeaderWithSearchBar(
 private fun ChatSearchBar(
     searchState: SearchState,
     modifier: Modifier = Modifier,
+    searchFieldPlaceholderText: String = "Search messages...",
     onSearchQueryChange: (String) -> Unit = {},
     onNextResult: () -> Unit = {},
     onPreviousResult: () -> Unit = {},
@@ -216,6 +218,7 @@ private fun ChatSearchBar(
     val currentResultIndex = searchState.currentSearchResultIndex
 
     val searchFieldState = rememberTextFieldState(searchQuery)
+    val isInputFieldEmpty by remember { derivedStateOf { searchFieldState.text.isBlank() } }
 
     val focusRequester = remember { FocusRequester() }
 
@@ -236,7 +239,6 @@ private fun ChatSearchBar(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(ChatAppColors.Panel.background)
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -244,9 +246,9 @@ private fun ChatSearchBar(
         // Search input field
         TextField(
             state = searchFieldState,
-            placeholder = { Text("Search messages...") },
+            placeholder = { Text(searchFieldPlaceholderText) },
             modifier = Modifier
-                .weight(1f)
+                .weight(0.8f)
                 .focusRequester(focusRequester = focusRequester)
                 .onPreviewKeyEvent { keyEvent ->
                     when {
@@ -271,51 +273,50 @@ private fun ChatSearchBar(
 
                         else -> false
                     }
+                },
+            leadingIcon = {
+                Icon(ChatAppIcons.Search, contentDescription = null, Modifier.padding(end = 8.dp))
+            },
+            trailingIcon = {
+                if (!isInputFieldEmpty) {
+                    CloseIcon { searchFieldState.setTextAndPlaceCursorAtEnd("") }
                 }
+            },
         )
 
         // Results counter
-        if (hasResults) {
-            Text(
-                text = "${currentResultIndex + 1}/$totalResults",
-                style = JewelTheme.defaultTextStyle.copy(
-                    fontSize = 12.sp,
-                    color = ChatAppColors.Text.disabled
-                )
-            )
-        } else if (searchQuery.isNotBlank()) {
-            Text(
-                text = "No results",
-                style = JewelTheme.defaultTextStyle.copy(
-                    fontSize = 12.sp,
-                    color = ChatAppColors.Text.disabled
-                )
-            )
-        }
+        Text(
+            modifier = Modifier
+                .weight(0.1f),
+            textAlign = TextAlign.Center,
+            text = when {
+                hasResults -> "${currentResultIndex + 1}/$totalResults"
+                searchQuery.isNotBlank() -> "No results"
+                else -> ""
+            },
+            color = ChatAppColors.Text.disabled
+        )
 
         // Navigation buttons
-        DefaultButton(
-            onClick = onPreviousResult,
-            enabled = hasResults && totalResults > 1,
-            modifier = Modifier.widthIn(min = 40.dp)
-        ) {
-            Text("↑")
-        }
+        Row(Modifier.weight(0.1f)) {
+            IconButton(
+                onClick = onPreviousResult,
+                enabled = hasResults && totalResults > 1,
+            ) {
+                Icon(ChatAppIcons.Up, contentDescription = null)
+            }
 
-        DefaultButton(
-            onClick = onNextResult,
-            enabled = hasResults && totalResults > 1,
-            modifier = Modifier.widthIn(min = 40.dp)
-        ) {
-            Text("↓")
-        }
+            IconButton(
+                onClick = onNextResult,
+                enabled = hasResults && totalResults > 1,
+            ) {
+                Icon(ChatAppIcons.Down, contentDescription = null)
+            }
 
-        // Close button
-        IconButton(onClick = onCloseSearch) {
-            Icon(
-                ChatAppIcons.Header.close,
-                contentDescription = "Close search"
-            )
+            // Close button
+            IconButton(onClick = onCloseSearch) {
+                Icon(ChatAppIcons.Close, contentDescription = "Close search")
+            }
         }
     }
 }
