@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -115,20 +116,20 @@ private fun ChatList(
                 modifier = Modifier.fillMaxWidth().safeContentPadding(),
                 scrollState = listState,
             ) {
-                LazyColumn(
-                    state = listState,
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(vertical = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(2.dp)
-                ) {
-                    items(chatMessages, key = { it.id }) { message ->
-                        MessageBubble(
-                            message = message,
-                            modifier = Modifier.fillMaxWidth(),
-                            isMatchingSearch = searchState.searchQuery?.let { query -> message.matches(query) }
-                                ?: false,
-                            isHighlightedInSearch = message.id == searchState.currentSelectedSearchResultId,
-                        )
+                SelectionContainer {
+                    LazyColumn(
+                        state = listState,
+                        modifier = Modifier.fillMaxSize(),
+                        contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        items(chatMessages, key = { it.id }) { message ->
+                            if (message.isMyMessage) {
+                                SentMessageBubble(message, Modifier.fillMaxWidth())
+                            } else {
+                                ReceivedMessageBubble(message, Modifier.fillMaxWidth())
+                            }
+                        }
                     }
                 }
             }
