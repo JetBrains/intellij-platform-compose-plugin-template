@@ -11,11 +11,11 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
 import org.jetbrains.jewel.foundation.modifier.thenIf
 import org.jetbrains.jewel.foundation.theme.JewelTheme
+import org.jetbrains.jewel.ui.component.CircularProgressIndicator
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.typography
 import org.jetbrains.plugins.template.chatApp.ChatAppColors
 import org.jetbrains.plugins.template.chatApp.model.ChatMessage
-import org.jetbrains.plugins.template.components.PulsingText
 
 @Composable
 fun SentMessageBubble(message: ChatMessage, modifier: Modifier) {
@@ -95,7 +95,7 @@ private fun MessageBubbleImpl(
                     isHighlightedInSearch = isHighlightedInSearch,
                 )
             } else if (message.isAIThinkingMessage()) {
-                PulsingText(message.content, isLoading = true)
+                LoadingIndicator("Working on it...")
             }
         }
     }
@@ -112,4 +112,16 @@ private fun MessageContent(
         style = JewelTheme.typography.regular,
         color = ChatAppColors.Text.normal,
     )
+}
+
+@Composable
+private fun LoadingIndicator(loadingText: String) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        CircularProgressIndicator()
+
+        Text(text = loadingText, style = JewelTheme.typography.regular, color = ChatAppColors.Text.loadingMessage)
+    }
 }

@@ -31,6 +31,9 @@ object ChatAppColors {
 
         val authorName: Color
             @Composable get() = labelForeground
+
+        val loadingMessage: Color
+            @Composable get() = labelInfoForeground
     }
 
     object MessageBubble {
