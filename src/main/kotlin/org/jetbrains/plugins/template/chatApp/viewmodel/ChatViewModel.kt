@@ -1,9 +1,13 @@
 package org.jetbrains.plugins.template.chatApp.viewmodel
 
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.components.Service
+import com.intellij.openapi.components.service
+import com.intellij.openapi.project.Project
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.jetbrains.plugins.template.chatApp.model.ChatMessage
+import org.jetbrains.plugins.template.chatApp.repository.ChatRepository
 import org.jetbrains.plugins.template.chatApp.repository.ChatRepositoryApi
 
 interface ChatViewModelApi : Disposable {
@@ -41,7 +45,7 @@ class ChatViewModel(
      * A nullable [Job] instance used to manage the coroutine responsible for sending a message.
      * This property holds a reference to the currently active job related to the `onSendMessage`
      * operation in the [ChatViewModel]. It enables tracking, cancellation, and lifecycle management
-     * of the send message process.
+     * of the message sending process.
      */
     private var currentSendMessageJob: Job? = null
 
@@ -106,4 +110,12 @@ class ChatViewModel(
     }
 
     private fun getCurrentInputTextIfNotEmpty(): String? = _promptInputState.value.inputText.takeIf { it.isNotBlank() }
+}
+
+@Service(Service.Level.PROJECT)
+class ChatViewModelFactory(
+    @Suppress("unused") private val project: Project,
+    private val coroutineScope: CoroutineScope
+) {
+    fun create(): ChatViewModel = ChatViewModel(coroutineScope, service<ChatRepository>())
 }

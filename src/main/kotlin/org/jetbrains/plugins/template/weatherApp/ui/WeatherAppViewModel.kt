@@ -1,6 +1,8 @@
 package org.jetbrains.plugins.template.weatherApp.ui
 
 import com.intellij.openapi.Disposable
+import com.intellij.openapi.components.Service
+import com.intellij.openapi.project.Project
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,8 +10,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import org.jetbrains.plugins.template.weatherApp.model.Location
 import org.jetbrains.plugins.template.weatherApp.model.SelectableLocation
 import org.jetbrains.plugins.template.weatherApp.model.WeatherForecastData
+import org.jetbrains.plugins.template.weatherApp.services.WeatherForecastService
 import org.jetbrains.plugins.template.weatherApp.services.WeatherForecastServiceApi
-
 
 /**
  * Defines the contract for managing and observing location-related data in the application.
@@ -201,7 +203,6 @@ class LocationsUIState private constructor(
     }
 }
 
-
 /**
  * A ViewModel responsible for managing the user's locations and corresponding weather data.
  *
@@ -210,19 +211,19 @@ class LocationsUIState private constructor(
  * supplies observable state flows for the list of selectable locations and the currently selected
  * location's weather forecast.
  *
- * @property myInitialLocations The initial list of user-defined locations.
+ * @property initialLocations The initial list of user-defined locations.
  * @property viewModelScope The coroutine scope in which this ViewModel operates.
  * @property weatherService The service responsible for fetching weather forecasts for given locations.
  */
 class WeatherAppViewModel(
-    myInitialLocations: List<Location>,
+    initialLocations: List<Location>,
     private val viewModelScope: CoroutineScope,
     private val weatherService: WeatherForecastServiceApi,
 ) : MyLocationsViewModelApi, WeatherViewModelApi {
 
     private var currentWeatherJob: Job? = null
 
-    private val _myLocationsUIStateFlow = MutableStateFlow(LocationsUIState.initial(myInitialLocations))
+    private val _myLocationsUIStateFlow = MutableStateFlow(LocationsUIState.initial(initialLocations))
 
     /**
      * A state flow representing the current UI state of locations, including the list of locations
@@ -322,5 +323,16 @@ class WeatherAppViewModel(
         "Failed to load weather forecast for ${location.label}",
         location,
         error
+    )
+}
+
+@Service(Service.Level.PROJECT)
+class WeatherViewModelFactory(
+    @Suppress("unused") private val project: Project,
+    private val coroutineScope: CoroutineScope
+) {
+    fun create(initialLocations: List<Location>): WeatherAppViewModel =
+        WeatherAppViewModel(initialLocations, coroutineScope,
+        WeatherForecastService()
     )
 }

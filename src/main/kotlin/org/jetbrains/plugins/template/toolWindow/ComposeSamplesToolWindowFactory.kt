@@ -8,15 +8,12 @@ import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import org.jetbrains.jewel.bridge.addComposeTab
-import org.jetbrains.plugins.template.CoroutineScopeHolder
 import org.jetbrains.plugins.template.chatApp.ChatAppSample
-import org.jetbrains.plugins.template.chatApp.repository.ChatRepository
-import org.jetbrains.plugins.template.chatApp.viewmodel.ChatViewModel
+import org.jetbrains.plugins.template.chatApp.viewmodel.ChatViewModelFactory
 import org.jetbrains.plugins.template.weatherApp.model.Location
 import org.jetbrains.plugins.template.weatherApp.services.LocationsProvider
-import org.jetbrains.plugins.template.weatherApp.services.WeatherForecastService
 import org.jetbrains.plugins.template.weatherApp.ui.WeatherAppSample
-import org.jetbrains.plugins.template.weatherApp.ui.WeatherAppViewModel
+import org.jetbrains.plugins.template.weatherApp.ui.WeatherViewModelFactory
 
 class ComposeSamplesToolWindowFactory : ToolWindowFactory, DumbAware {
     override fun shouldBeAvailable(project: Project) = true
@@ -28,12 +25,7 @@ class ComposeSamplesToolWindowFactory : ToolWindowFactory, DumbAware {
 
     private fun weatherApp(project: Project, toolWindow: ToolWindow) {
         // create ViewModel once per tool window
-        val viewModel = WeatherAppViewModel(
-            listOf(Location("Munich", "Germany")),
-            project.service<CoroutineScopeHolder>()
-                .createScope(::WeatherAppViewModel.name),
-            WeatherForecastService()
-        )
+        val viewModel = project.service<WeatherViewModelFactory>().create(listOf(Location("Munich", "Germany")))
         Disposer.register(toolWindow.disposable, viewModel)
 
         toolWindow.addComposeTab("Weather App", focusOnClickInside = true) {
@@ -50,11 +42,7 @@ class ComposeSamplesToolWindowFactory : ToolWindowFactory, DumbAware {
     }
 
     private fun chatApp(project: Project, toolWindow: ToolWindow) {
-        val viewModel = ChatViewModel(
-            project.service<CoroutineScopeHolder>()
-                .createScope(ChatViewModel::class.java.simpleName),
-            service<ChatRepository>()
-        )
+        val viewModel = project.service<ChatViewModelFactory>().create()
         Disposer.register(toolWindow.disposable, viewModel)
 
         toolWindow.addComposeTab("Chat App", focusOnClickInside = true) {
