@@ -3,10 +3,7 @@ package org.jetbrains.plugins.template.chatApp.viewmodel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import org.jetbrains.plugins.template.chatApp.model.ChatMessage
-import org.jetbrains.plugins.template.chatApp.ui.SearchState
-import org.jetbrains.plugins.template.chatApp.ui.hasResults
-import org.jetbrains.plugins.template.chatApp.ui.isSearching
-import org.jetbrains.plugins.template.chatApp.ui.searchQuery
+import org.jetbrains.plugins.template.chatApp.ui.*
 
 /**
  * Implementation of the SearchChatMessagesHandler interface for handling
@@ -57,42 +54,80 @@ class SearchChatMessagesHandlerImpl(
 
     override fun onNavigateToNextSearchResult() {
         val searchState = _searchStateFlow.value
-        if (searchState !is SearchState.SearchResults) return
+        if (searchState !is SearchState.SearchResult.Found) return
         if (!(searchState.hasResults)) return
 
-        moveSearchResultSelectionToIndex(searchState, searchState.currentSelectedSearchResultIndex + 1)
+        moveSearchResultSelectionToIndex(searchState, searchState.selectedSearchMatchId + 1)
     }
 
     override fun onNavigateToPreviousSearchResult() {
         val searchState = _searchStateFlow.value
-        if (searchState !is SearchState.SearchResults) return
+        if (searchState !is SearchState.SearchResult.Found) return
         if (!(searchState.hasResults)) return
 
-        moveSearchResultSelectionToIndex(searchState, searchState.currentSelectedSearchResultIndex - 1)
+        moveSearchResultSelectionToIndex(searchState, searchState.selectedSearchMatchId - 1)
     }
 
-    private fun moveSearchResultSelectionToIndex(searchState: SearchState.SearchResults, newSearchResultIndex: Int) {
-        val nextSearchResultIndex = when {
-            newSearchResultIndex < 0 -> searchState.searchResultIds.lastIndex
-            newSearchResultIndex > searchState.searchResultIds.lastIndex -> 0
-            else -> newSearchResultIndex
+    private fun moveSearchResultSelectionToIndex(searchState: SearchState.SearchResult.Found, newIndex: Int) {
+        val nextIndex = when {
+            newIndex < 0 -> searchState.searchMatches.lastIndex
+            newIndex > searchState.searchMatches.lastIndex -> 0
+            else -> newIndex
         }
 
-        _searchStateFlow.value = searchState.copy(currentSelectedSearchResultIndex = nextSearchResultIndex)
+        _searchStateFlow.value = searchState.copy(selectedSearchMatchId = nextIndex)
     }
 
     private fun performSearch(
         query: String,
         messages: List<ChatMessage>
     ) {
-        val matchingIds = messages
-            .filter { message -> message.matches(query) }
-            .map { it.id }
+        if (query.isBlank()) {
+            _searchStateFlow.value = SearchState.SearchResult.None(query)
+            return
+        }
 
-        _searchStateFlow.value = SearchState.SearchResults(
-            query = query,
-            searchResultIds = matchingIds,
-            currentSelectedSearchResultIndex = if (matchingIds.isNotEmpty()) 0 else -1
-        )
+        var currentSearchMatchId = 0
+        val searchMatches = mutableListOf<SearchMatches>()
+        for (message in messages) {
+            val matches = findSearchMatches(message, query, currentSearchMatchId)
+            searchMatches += matches
+            currentSearchMatchId += matches.size
+        }
+
+        _searchStateFlow.value = when {
+            searchMatches.isEmpty() -> SearchState.SearchResult.None(query)
+            else -> SearchState.SearchResult.Found(
+                query = query,
+                selectedSearchMatchId = if (searchMatches.isNotEmpty()) 0 else -1,
+                searchMatches = searchMatches
+            )
+        }
+    }
+
+    private fun findSearchMatches(message: ChatMessage, query: String, currentSearchMatchId: Int): List<SearchMatches> {
+        val lowerText = message.content.lowercase()
+        val lowerQuery = query.lowercase()
+
+        var nextSearchMatchId = currentSearchMatchId
+        val searchMatches = mutableListOf<SearchMatches>()
+        var startIndex = 0
+
+        while (true) {
+            val index = lowerText.indexOf(lowerQuery, startIndex)
+            if (index == -1) break
+
+            searchMatches += SearchMatches(
+                searchMatchId = nextSearchMatchId,
+                messageId = message.id,
+                startInclusive = index,
+                endExclusive = index + query.length
+            )
+
+            nextSearchMatchId++
+            startIndex = index + query.length
+        }
+
+        return searchMatches
     }
 }

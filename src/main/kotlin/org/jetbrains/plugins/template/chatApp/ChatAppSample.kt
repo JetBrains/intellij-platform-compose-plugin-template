@@ -31,6 +31,8 @@ import org.jetbrains.plugins.template.components.CloseIcon
 @Composable
 fun ChatAppSample(viewModel: ChatViewModel) {
     val chatMessages by viewModel.chatMessagesFlow.collectAsState(emptyList<ChatMessage>())
+    val lastMessage by derivedStateOf { chatMessages.lastOrNull() }
+    val lastMessageIndex by derivedStateOf { chatMessages.lastIndex }
     val searchState by viewModel.searchChatMessagesHandler().searchStateFlow.collectAsState(SearchState.Idle)
     val messageInputState by viewModel.promptInputState.collectAsState(MessageInputState.Disabled)
 
@@ -38,17 +40,17 @@ fun ChatAppSample(viewModel: ChatViewModel) {
     val textFieldState = rememberTextFieldState()
 
     // Auto-scroll to the bottom when new messages arrive (only when not searching)
-    LaunchedEffect(chatMessages.lastOrNull()?.id) {
+    LaunchedEffect(lastMessage?.id, lastMessageIndex) {
         if (chatMessages.isNotEmpty() && !searchState.isSearching) {
-            listState.animateScrollToItem(chatMessages.lastIndex)
+            listState.animateScrollToItem(lastMessageIndex)
         }
     }
 
     // Auto-scroll to the current search result
-    LaunchedEffect(searchState.currentSelectedSearchResultId) {
-        val currentResultId = searchState.currentSelectedSearchResultId
-        if (currentResultId != null) {
-            val messageIndexInList = chatMessages.indexOfFirst { it.id == currentResultId }
+    LaunchedEffect(searchState.currentSelectedSearchMatch) {
+        val selectedSearchMatch = searchState.currentSelectedSearchMatch
+        if (selectedSearchMatch != null) {
+            val messageIndexInList = chatMessages.indexOfFirst { it.id == selectedSearchMatch.messageId }
             if (messageIndexInList >= 0) {
                 listState.animateScrollToItem(messageIndexInList)
             }
@@ -125,9 +127,17 @@ private fun ChatList(
                     ) {
                         items(chatMessages, key = { it.id }) { message ->
                             if (message.isMyMessage) {
-                                SentMessageBubble(message, Modifier.fillMaxWidth())
+                                SentMessageBubble(
+                                    message = message,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    searchState = searchState
+                                )
                             } else {
-                                ReceivedMessageBubble(message, Modifier.fillMaxWidth())
+                                ReceivedMessageBubble(
+                                    message = message,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    searchState = searchState
+                                )
                             }
                         }
                     }
@@ -215,8 +225,8 @@ private fun ChatSearchBar(
 ) {
     val searchQuery = searchState.searchQuery.orEmpty()
     val hasResults = searchState.hasResults
-    val totalResults = searchState.totalResults
-    val currentResultIndex = searchState.currentSearchResultIndex
+    val totalResults = searchState.searchMatchesCount
+    val currentResultIndex = searchState.selectedSearchMatchId
 
     val searchFieldState = rememberTextFieldState(searchQuery)
     val isInputFieldEmpty by remember { derivedStateOf { searchFieldState.text.isBlank() } }
