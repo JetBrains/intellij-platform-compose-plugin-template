@@ -41,4 +41,18 @@ object ChatAppColors {
             @Composable get() = JBColor.namedColor("HelpBrowser.UserMessage.background", 0xDFE1E5)
                 .toComposeColor()
     }
+
+    object Search {
+        // Background color for the highlighted word in the currently selected search result
+        val highlightedWordBackground: Color = JBColor.namedColor("SearchMatch.startBackground", 0xBA9752)
+            .toComposeColor()
+
+        // Text color for the highlighted word
+        val highlightedWordText: Color = Color.White
+
+        val selectedWordBackground: Color @Composable get() = JBColor.namedColor("SearchMatch.startBackground", 0xBA9752)
+            .toComposeColor()
+
+        val selectedHighlightedWordText: Color = Color.Black
+    }
 }
