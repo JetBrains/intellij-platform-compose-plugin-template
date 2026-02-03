@@ -33,7 +33,7 @@ interface ChatRepositoryApi {
 @Service
 class ChatRepository : ChatRepositoryApi {
 
-    private val chatMessageFactory = ChatMessageFactory("AI Buddy", "Super Engineer")
+    private val chatMessageFactory = ChatMessageFactory("AI Buddy", "Me")
     private val aiResponseGenerator = AIResponseGenerator()
     private val _messages = MutableStateFlow<List<ChatMessage>>(
         listOf(

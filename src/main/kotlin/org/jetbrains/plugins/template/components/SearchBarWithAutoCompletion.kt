@@ -30,6 +30,7 @@ import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.TextField
 import org.jetbrains.jewel.ui.icons.AllIconsKeys
 import org.jetbrains.plugins.template.ComposeTemplateBundle
+import org.jetbrains.plugins.template.chatApp.ChatAppIcons
 import org.jetbrains.plugins.template.weatherApp.model.PreviewableItem
 import org.jetbrains.plugins.template.weatherApp.model.Searchable
 import org.jetbrains.plugins.template.weatherApp.services.SearchAutoCompletionItemProvider
@@ -84,7 +85,7 @@ fun <T> SearchBarWithAutoCompletion(
             },
             trailingIcon = {
                 if (!isInputFieldEmpty) {
-                    CloseIconButton {
+                    CloseIcon {
                         textFieldState.setTextAndPlaceCursorAtEnd("")
                     }
                 }
@@ -120,7 +121,7 @@ fun <T> SearchBarWithAutoCompletion(
 }
 
 @Composable
-fun CloseIconButton(onClick: () -> Unit) {
+fun CloseIcon(onClick: () -> Unit) {
     val interactionSource = remember { MutableInteractionSource() }
     var hovered by remember { mutableStateOf(false) }
 
@@ -134,7 +135,7 @@ fun CloseIconButton(onClick: () -> Unit) {
     }
 
     Icon(
-        key = if (hovered) AllIconsKeys.Actions.CloseHovered else AllIconsKeys.Actions.Close,
+        key = if (hovered) ChatAppIcons.CloseSmallHovered else ChatAppIcons.CloseSmall,
         contentDescription = ComposeTemplateBundle.message("weather.app.clear.button.content.description"),
         modifier = Modifier
             .pointerHoverIcon(PointerIcon.Default)
@@ -145,7 +146,6 @@ fun CloseIconButton(onClick: () -> Unit) {
             ) { onClick() },
     )
 }
-
 
 internal data class CompletionItem<T : Searchable>(
     val item: T,

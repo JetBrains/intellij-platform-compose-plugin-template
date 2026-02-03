@@ -2,8 +2,10 @@ package org.jetbrains.plugins.template.chatApp
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import com.intellij.ui.JBColor
+import org.jetbrains.jewel.bridge.toComposeColor
 import org.jetbrains.jewel.foundation.theme.JewelTheme
-import org.jetbrains.jewel.ui.theme.defaultBannerStyle
+import org.jetbrains.jewel.ui.theme.colorPalette
 
 object ChatAppColors {
     object Panel {
@@ -13,57 +15,44 @@ object ChatAppColors {
 
     object Text {
         val disabled: Color
-            @Composable get() = JewelTheme.globalColors.text.disabled
+            @Composable get() = JewelTheme.colorPalette.grayOrNull(7) ?: JewelTheme.globalColors.text.disabled
 
         val normal: Color
             @Composable get() = JewelTheme.globalColors.text.normal
 
-        // Misc labels
-        val timestamp: Color = Color.LightGray.copy(alpha = 0.8f)
+        val labelForeground: Color
+            @Composable get() = JBColor.namedColor("Label.foreground", 0xDFE1E5).toComposeColor()
 
-        val authorName: Color = Color(0xDBE0EBFF)
+        val labelInfoForeground: Color
+            @Composable get() = JBColor.namedColor("Label.infoForeground", 0x6F737A).toComposeColor()
+
+        val timestamp: Color
+            @Composable get() = labelInfoForeground
+
+        val authorName: Color
+            @Composable get() = labelForeground
+
+        val loadingMessage: Color
+            @Composable get() = labelInfoForeground
     }
 
     object MessageBubble {
-        // Backgrounds
         val myBackground: Color
-            @Composable get() = JewelTheme.defaultBannerStyle.information.colors.background.copy(alpha = 0.75f)
-
-        val othersBackground: Color
-            @Composable get() = JewelTheme.defaultBannerStyle.success.colors.background.copy(alpha = 0.75f)
-
-        // Borders
-        val myBackgroundBorder: Color
-            @Composable get() = JewelTheme.defaultBannerStyle.information.colors.border
-
-        val othersBackgroundBorder: Color
-            @Composable get() = JewelTheme.defaultBannerStyle.success.colors.border
-
-        // Search highlight state
-        val mySearchHighlightedBackground: Color
-            @Composable get() = JewelTheme.defaultBannerStyle.information.colors.background
-
-        // Search highlight state
-        val othersSearchHighlightedBackground: Color
-            @Composable get() = JewelTheme.defaultBannerStyle.success.colors.background
-
-        val searchHighlightedBackgroundBorder: Color = Color(0xFFDF9303)
-
-        val matchingMyBorder: Color
-            @Composable get() = JewelTheme.defaultBannerStyle.information.colors.border.copy(alpha = 0.75f)
-
-        val matchingOthersBorder: Color
-            @Composable get() = JewelTheme.defaultBannerStyle.success.colors.border.copy(alpha = 0.75f)
-
+            @Composable get() = JBColor.namedColor("HelpBrowser.UserMessage.background", 0xDFE1E5)
+                .toComposeColor()
     }
 
-    object Prompt {
-        val border: Color = Color.White
-    }
+    object Search {
+        // Background color for the highlighted word in the currently selected search result
+        val highlightedWordBackground: Color = JBColor.namedColor("SearchMatch.startBackground", 0xBA9752)
+            .toComposeColor()
 
-    object Icon {
-        val enabledIconTint: Color = Color.White
-        val disabledIconTint: Color = Color.Gray
-        val stopIconTint: Color = Color.White
+        // Text color for the highlighted word
+        val highlightedWordText: Color = Color.White
+
+        val selectedWordBackground: Color @Composable get() = JBColor.namedColor("SearchMatch.startBackground", 0xBA9752)
+            .toComposeColor()
+
+        val selectedHighlightedWordText: Color = Color.Black
     }
 }

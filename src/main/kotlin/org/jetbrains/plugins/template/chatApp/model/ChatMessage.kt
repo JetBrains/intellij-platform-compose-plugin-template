@@ -28,7 +28,6 @@ data class ChatMessage(
         return timestamp.format(dateTimeFormatter)
     }
 
-
     fun isTextMessage(): Boolean = this.type == TEXT
 
     fun isAIThinkingMessage(): Boolean = this.type == AI_THINKING
