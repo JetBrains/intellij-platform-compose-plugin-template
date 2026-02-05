@@ -217,7 +217,7 @@ private fun HighlightedText(textSegment: TextSegment) {
             drawRoundRect(
                 color = ChatAppColors.Search.highlightedWordBackground,
                 size = size,
-                cornerRadius = CornerRadius(6.dp.toPx()),
+                cornerRadius = CornerRadius(4.dp.toPx()),
                 style = Stroke(width = 1.dp.toPx())
             )
         },
@@ -235,7 +235,7 @@ private fun SelectedHighlightedText(textSegment: TextSegment) {
             drawRoundRect(
                 color = backgroundColor,
                 size = size,
-                cornerRadius = CornerRadius(6.dp.toPx()),
+                cornerRadius = CornerRadius(4.dp.toPx()),
                 style = Fill
             )
             drawContent()
