@@ -4,14 +4,14 @@ junit = "4.13.2"
 opentest4j = "1.3.0"
 hamcrest = "2.2"
 # Has to be in sync with IntelliJ Platform
-composeuitest = "1.10.0-rc01"
-jewelstandalone = "0.33.0-253.29795"
+composeuitest = "1.10.0"
+jewelstandalone = "0.34.0-253.31033.149"
 skikoAwtRuntimeAll = "0.9.37.3"
 
 # plugins
 changelog = "2.2.1"
-intelliJPlatform = "2.10.5"
-kotlin = "2.1.20"
+intelliJPlatform = "2.11.0"
+kotlin = "2.2.20"
 
 [libraries]
 junit = { group = "junit", name = "junit", version.ref = "junit" }

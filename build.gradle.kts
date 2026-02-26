@@ -43,6 +43,8 @@ dependencies {
     testImplementation(libs.hamcrest)
     testImplementation(libs.composeuitest)
     testImplementation(libs.jewelstandalone)
+    // TODO Remove once [https://youtrack.jetbrains.com/issue/JEWEL-1263] is fixed
+    testRuntimeOnly("net.java.dev.jna:jna-platform:5.17.0")
     // Workaround for running tests on Windows and Linux
     // It provides necessary Skiko runtime native binaries
     testImplementation(libs.skikoAwtRuntimeAll)
