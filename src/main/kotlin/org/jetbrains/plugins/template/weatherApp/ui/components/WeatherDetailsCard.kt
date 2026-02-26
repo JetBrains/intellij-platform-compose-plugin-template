@@ -19,7 +19,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.jewel.foundation.theme.JewelTheme
-import org.jetbrains.jewel.ui.component.*
+import org.jetbrains.jewel.ui.component.HorizontallyScrollableContainer
+import org.jetbrains.jewel.ui.component.Icon
+import org.jetbrains.jewel.ui.component.Text
+import org.jetbrains.jewel.ui.component.VerticallyScrollableContainer
 import org.jetbrains.jewel.ui.icons.AllIconsKeys
 import org.jetbrains.plugins.template.ComposeTemplateBundle
 import org.jetbrains.plugins.template.components.PulsingText
@@ -89,22 +92,12 @@ fun WeatherDetailsCard(
                     // Current Time
                     TimeDisplay(weatherForecastState, textColor)
 
-                    ActionButton(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
-                            .background(Color.Transparent)
-                            .padding(8.dp),
-                        tooltip = { Text("Refresh weather data") },
-                        onClick = {
-                            weatherForecastState.getLocationOrNull()?.let { onReloadWeatherData(it) }
-                        },
-                    ) {
-                        Icon(
-                            key = AllIconsKeys.Actions.Refresh,
-                            contentDescription = "Refresh",
-                            tint = Color.White
-                        )
-                    }
+                    CardIconButton(
+                        iconKey = AllIconsKeys.Actions.Refresh,
+                        contentDescription = "Refresh",
+                        onClick = { weatherForecastState.getLocationOrNull()?.let { onReloadWeatherData(it) } },
+                        tooltip = { Text("Refresh Weather Data") },
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
