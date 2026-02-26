@@ -168,8 +168,8 @@ internal class CompletionPopupController<T : Searchable>(
 
     val completionItems: List<CompletionItem<T>> get() = _filteredCompletionItems
 
-    val selectedItem: CompletionItem<T>
-        get() = _filteredCompletionItems[selectedItemIndex]
+    private val selectedItem: CompletionItem<T>?
+        get() = _filteredCompletionItems.getOrNull(selectedItemIndex)
 
     var isVisible by mutableStateOf(false)
         private set
@@ -227,7 +227,8 @@ internal class CompletionPopupController<T : Searchable>(
     }
 
     fun onSelectionConfirmed() {
-        doCompleteSelection(this.selectedItem)
+        val item = selectedItem ?: return
+        doCompleteSelection(item)
     }
 
     private fun doCompleteSelection(selectedItem: CompletionItem<T>) {
