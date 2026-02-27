@@ -285,7 +285,16 @@ private fun <T : Searchable> Modifier.handlePopupCompletionKeyEvents(
         if (keyEvent.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
 
         return@onPreviewKeyEvent when (keyEvent.key) {
-            Key.Tab, Key.Enter, Key.NumPadEnter -> {
+            Key.Tab -> {
+                if (popupController.isVisible) {
+                    popupController.onSelectionConfirmed()
+                    true  // consume: completes the selection
+                } else {
+                    false // don't consume: lets focus move to the next component
+                }
+            }
+
+            Key.Enter, Key.NumPadEnter -> {
                 popupController.onSelectionConfirmed()
                 true
             }
